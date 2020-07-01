@@ -1,6 +1,13 @@
-import './sass/index.scss'
+import './styles/index.scss'
 import React from 'react'
 import { render } from 'react-dom'
 import App from './components/App'
 
-render(<App/>, document.querySelector('#app'))
+function renderApp () {
+  render(<App/>, document.querySelector('#app'))
+}
+
+renderApp()
+if(module.hot) {
+  module.hot.accept('./components/App', () => renderApp())
+}

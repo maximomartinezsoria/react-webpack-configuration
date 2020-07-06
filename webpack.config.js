@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const webpack = require('webpack')
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.js'),
@@ -80,7 +82,15 @@ module.exports = {
       chunkFilename: 'css/[id].[hash].css'
     }),
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*']
-    })
+      cleanOnceBeforeBuildPatterns: ['**/main.*']
+    }),
+    new webpack.DllReferencePlugin({
+      manifest: require('./modules-manifest.json')
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: path.resolve(__dirname, "dist/js/*.dll.js"),
+      outputPath: "js",
+      publicPath: "http://localhost:3001/js/"
+    }),
   ],
 }
